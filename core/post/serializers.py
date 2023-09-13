@@ -21,10 +21,10 @@ class PostSerializer(AbstractSerializer):
         return rep
 
     def update(self, instance, validated_data):
-        if not isinstance.edited:
+        if not instance.edited:
             validated_data['edited'] = True
-            instance = super().update(instance, validated_data)
-            return instance
+        instance = super().update(instance, validated_data)
+        return instance
 
     class Meta:
         model = Post
