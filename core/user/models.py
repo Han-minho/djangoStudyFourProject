@@ -67,6 +67,7 @@ class User(AbstractModel, AbstractBaseUser, PermissionsMixin):
     # updated = models.DateTimeField(auto_now=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+    posts_liked = models.ManyToManyField("core_post.Post", related_name="like_by")
     objects = UserManager()
 
     def __str__(self):
@@ -75,3 +76,22 @@ class User(AbstractModel, AbstractBaseUser, PermissionsMixin):
     @property
     def name(self):
         return f"{self.first_name} {self.last_name}"
+
+    def like(self, post):
+        """
+            like 'post' if hasn't been done yet
+        """
+        return self.posts_liked.add(post)
+
+    def remove_like(self, post):
+        """
+            Remove a like from a 'post'
+        """
+        return self.posts_liked.remove(post)
+
+    def has_liked(self, post):
+        """
+            Return True if the user has liked a 'post'
+                else False
+        """
+        return self.posts_liked.filter(pk=post.pk).exists()

@@ -1,3 +1,4 @@
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
@@ -25,3 +26,21 @@ class PostViewSet(AbstractViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return Response(serializer.data, status.HTTP_201_CREATED)
+
+    # 좋아요
+    @action(methods=['post'], detail=True)
+    def like(self, request, *args, **kwargs):
+        post = self.get_object()
+        user = self.request.user
+        user.like(post)
+        serializer = self.serializer_class(post)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 좋아요 해제
+    @action(methods=['post'], detail=True)
+    def remove_like(self, request, *args, **kwargs):
+        post = self.get_object()
+        user = self.request.user
+        user.remove_like(post)
+        serializer = self.serializer_class(post)
+        return Response(serializer.data, status=status.HTTP_200_OK)
