@@ -67,7 +67,7 @@ class User(AbstractModel, AbstractBaseUser, PermissionsMixin):
     # updated = models.DateTimeField(auto_now=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
-    posts_liked = models.ManyToManyField("core_post.Post", related_name="like_by")
+    posts_liked = models.ManyToManyField("core_post.Post", related_name="liked_by")
     objects = UserManager()
 
     def __str__(self):
